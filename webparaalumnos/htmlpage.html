@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+
+<html tada-bs-theme="dark">
+<head>
+    <meta charset="utf-8" />
+    <title>::.. SISTEMA ACADEMICO ..::</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap%205.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="https://cdn.jsdelivr.net/npm/bootstrap%205.3.8/dist/css/bootstrap.min.css" crossorigin="anonimous" />
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="/img/logo.png" height="50" />
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNaAltMarkup">
+                <div class="navbar-nav" id="mnxAcademica">
+                    <a class="nav-link" href="#" data-form="alumno">Alumnos</a>
+                    <a class="nav-link" href="#" data-form="docente">Docentes</a>
+                    <a class="nav-link" href="#" data-form="materia">Materias</a>
+                    <a class="nav-link" href="#" data-form="matricula">Matricula</a>
+                    <a class="nav-link" href="#" data-form="periodo">Periodos</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid">
+        <div class="position-absolute" id="alumno"></div>
+        <div class="position-absolute" id="busqueda_alumno"></div>
+
+        <div class="position-absolute" id="docente"></div>
+        <div class="position-absolute" id="busqueda_docente"></div>
+
+        <div class="position-absolute" id="materia"></div>
+        <div class="position-absolute" id="busqueda_materia"></div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvsQOEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.min.js" integrity="sha256-/9n+G+I/mF8sP8+eSdw6EK7x+zXbmzF+eZMXgl4QwPQ=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", e => {
+            mnxAcademia.addEventListener("click", event => {
+                event.preventDefault();
+                abrirVentana(event.target.database.form);
+            });
+        });
+        function cerrarVentana() {
+            $('.btnclose').click(e => {
+                $(`#${e.target.dataset.form}`).hide();
+            });
+        }
+    </script>
+</body>
+</html>
