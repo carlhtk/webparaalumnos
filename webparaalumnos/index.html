@@ -1,10 +1,10 @@
 ﻿<!DOCTYPE html>
 
-<html tada-bs-theme="dark">
+<html data-bs-theme="dark">
 <head>
     <meta charset="utf-8" />
     <title>::.. SISTEMA ACADEMICO ..::</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap%205.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="https://cdn.jsdelivr.net/npm/bootstrap%205.3.8/dist/css/bootstrap.min.css" crossorigin="anonimous" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap%205.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="https://cdn.jsdelivr.net/npm/bootstrap%205.3.8/dist/css/bootstrap.min.css" crossorigin="anonymous" />
 </head>
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -43,8 +43,20 @@
                 abrirVentana(event.target.database.form);
             });
         });
+        function abrirVentana(form) {
+            let $ventana = $(`#${form}`); //#alumno, #docente, #materia
+            if ($ventana.find(`form`).lenght > 0) {
+                $ventana.show();
+            } else {
+                let url = `/views/${form}.html`;
+                fetch(url).then(resp => rep.text()).then(vista => {
+                    $(`#${form}`).html(vista).draggable();
+                    cerrarVentana();
+                })
+            }
+        }
         function cerrarVentana() {
-            $('.btnclose').click(e => {
+            $('.btn-lose').click(e => {
                 $(`#${e.target.dataset.form}`).hide();
             });
         }
