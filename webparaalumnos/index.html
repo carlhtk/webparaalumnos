@@ -38,18 +38,18 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script>
         document.addEventListener("DOMContentLoaded", e => {
-            mnxAcademia.addEventListener("click", event => {
+            mnxAcademica.addEventListener("click", event => {
                 event.preventDefault();
-                abrirVentana(event.target.database.form);
+                abrirVentana(event.target.dataset.form);
             });
         });
         function abrirVentana(form) {
             let $ventana = $(`#${form}`); //#alumno, #docente, #materia
-            if ($ventana.find(`form`).lenght > 0) {
+            if ($ventana.find(`form`).length > 0) {
                 $ventana.show();
             } else {
                 let url = `/views/${form}.html`;
-                fetch(url).then(resp => rep.text()).then(vista => {
+                fetch(url).then(resp => resp.text()).then(vista => {
                     $(`#${form}`).html(vista).draggable();
                     cerrarVentana();
                 })

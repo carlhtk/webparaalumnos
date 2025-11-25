@@ -52,7 +52,7 @@ async function guardarAlumno() {
         telefono: txtTelefonoAlumno.value
     };
 
-    const url = 'https://localhost:7005/api/Alumnos';
+    const url = 'https://localhost:7039/api/Alumnos';
 
     const respuesta = await fetch(url, {
         method: 'POST',
