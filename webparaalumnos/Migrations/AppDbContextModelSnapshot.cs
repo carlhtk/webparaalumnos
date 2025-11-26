@@ -23,8 +23,8 @@ namespace webparaalumnos.Migrations
 
             modelBuilder.Entity("webparaalumnos.Models.Alumno", b =>
                 {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Apellido")
                         .IsRequired()

@@ -26,14 +26,11 @@ namespace webparaalumnos.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Alumno>> GetAlumno(int id)
+        public async Task<ActionResult<Alumno>> GetAlumno(string id)
         {
             var alumno = await _context.Alumnos.FindAsync(id);
 
-            if (alumno == null)
-            {
-                return NotFound("Alumno no encontrado");
-            }
+            if (alumno == null) return NotFound("Alumno no encontrado");
 
             return alumno;
         }
@@ -41,6 +38,12 @@ namespace webparaalumnos.Controllers
         [HttpPost]
         public async Task<ActionResult<Alumno>> PostAlumno(Alumno nuevoAlumno)
         {
+            // Verificamos si el código ya existe para evitar duplicados
+            if (AlumnoExists(nuevoAlumno.Id))
+            {
+                return BadRequest("Ya existe un alumno con ese código.");
+            }
+
             _context.Alumnos.Add(nuevoAlumno);
             await _context.SaveChangesAsync();
 
@@ -48,12 +51,9 @@ namespace webparaalumnos.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAlumno(int id, Alumno alumnoActualizado)
+        public async Task<IActionResult> PutAlumno(string id, Alumno alumnoActualizado)
         {
-            if (id != alumnoActualizado.Id)
-            {
-                return BadRequest("El ID no coincide");
-            }
+            if (id != alumnoActualizado.Id) return BadRequest("El ID no coincide");
 
             _context.Entry(alumnoActualizado).State = EntityState.Modified;
 
@@ -63,27 +63,18 @@ namespace webparaalumnos.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!AlumnoExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                if (!AlumnoExists(id)) return NotFound();
+                else throw;
             }
 
             return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAlumno(int id)
+        public async Task<IActionResult> DeleteAlumno(string id)
         {
             var alumno = await _context.Alumnos.FindAsync(id);
-            if (alumno == null)
-            {
-                return NotFound();
-            }
+            if (alumno == null) return NotFound();
 
             _context.Alumnos.Remove(alumno);
             await _context.SaveChangesAsync();
@@ -91,7 +82,7 @@ namespace webparaalumnos.Controllers
             return Ok("Alumno eliminado");
         }
 
-        private bool AlumnoExists(int id)
+        private bool AlumnoExists(string id)
         {
             return _context.Alumnos.Any(e => e.Id == id);
         }

@@ -57,10 +57,13 @@
         function abrirVentana(form) {
             let $ventana = $(`#${form}`);
 
-            if ($ventana.find(`form`).length > 0) {
-                $ventana.show();
+            if ($ventana.find(`form, .card`).length > 0) {
+                $ventana.show(); 
             } else {
-                let url = `/views/${form}.html`;
+
+                let version = new Date().getTime();
+                let url = `/views/${form}.html?v=${version}`;
+
                 fetch(url)
                     .then(resp => {
                         if (resp.ok) return resp.text();
@@ -68,6 +71,7 @@
                     })
                     .then(vista => {
                         $ventana.html(vista).draggable();
+                        $ventana.show(); 
                     })
                     .catch(err => console.error(err));
             }

@@ -10,14 +10,5 @@ namespace webparaalumnos.Data
         }
 
         public DbSet<Alumno> Alumnos { get; set; }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<Alumno>()
-                .Property(a => a.Id)
-                .ValueGeneratedNever();
-        }
     }
 }

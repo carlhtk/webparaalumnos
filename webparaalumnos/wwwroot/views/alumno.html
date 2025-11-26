@@ -3,7 +3,9 @@
     <div class="row p-1">
         <div class="col-3 col-md-2">CÓDIGO</div>
         <div class="col-9 col-md-4">
-            <input required type="number" class="form-control" id="txtCodigoAlumno" name="txtCodigoAlumno" placeholder="Escribe el ID" />
+            <input required type="text" class="form-control" id="txtCodigoAlumno" name="txtCodigoAlumno"
+                   placeholder="Ej: 009925" maxlength="6" />
+            <small class="text-secondary">Debe tener exactamente 6 dígitos.</small>
         </div>
     </div>
 
@@ -50,35 +52,40 @@
     }
 
     async function guardarAlumno() {
-        // Recopilar datos convirtiendo los números correctamente
+        let idTexto = document.getElementById("txtCodigoAlumno").value;
+
+ 
+        let esValido = /^[0-9]{6}$/.test(idTexto);
+
+        if (!esValido) {
+            alert("⚠️ Error: El código debe ser numérico y tener exactamente 6 dígitos (Ej: 009925).");
+            return;
+        }
+
         let datos = {
-            id: parseInt(document.getElementById("txtCodigoAlumno").value),
+            id: idTexto, 
             nombre: document.getElementById("txtNombreAlumno").value,
             apellido: document.getElementById("txtApellidoAlumno").value,
             edad: parseInt(document.getElementById("txtEdadAlumno").value)
         };
 
-        const url = '/api/Alumnos';
-
         try {
-            const respuesta = await fetch(url, {
+            const respuesta = await fetch('/api/Alumnos', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(datos)
             });
 
             if (respuesta.ok) {
-                alert("¡Alumno guardado con éxito!");
+                alert("¡Alumno guardado: " + idTexto + "!");
                 limpiarDatosAlumno();
             } else {
                 let errorTexto = await respuesta.text();
-                alert("Error al guardar: " + errorTexto);
+                alert("Error: " + errorTexto);
             }
         } catch (error) {
             console.error(error);
-            alert("Error de conexión: " + error.message);
+            alert("Error de conexión");
         }
     }
 

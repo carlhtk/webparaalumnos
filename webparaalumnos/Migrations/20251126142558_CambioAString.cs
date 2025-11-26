@@ -5,7 +5,7 @@
 namespace webparaalumnos.Migrations
 {
     /// <inheritdoc />
-    public partial class PermitirIdManual : Migration
+    public partial class CambioAString : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -14,7 +14,7 @@ namespace webparaalumnos.Migrations
                 name: "Alumnos",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Nombre = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Apellido = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Edad = table.Column<int>(type: "int", nullable: false)

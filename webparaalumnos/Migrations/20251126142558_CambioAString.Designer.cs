@@ -11,8 +11,8 @@ using webparaalumnos.Data;
 namespace webparaalumnos.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251125044916_PermitirIdManual")]
-    partial class PermitirIdManual
+    [Migration("20251126142558_CambioAString")]
+    partial class CambioAString
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,8 +26,8 @@ namespace webparaalumnos.Migrations
 
             modelBuilder.Entity("webparaalumnos.Models.Alumno", b =>
                 {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Apellido")
                         .IsRequired()
