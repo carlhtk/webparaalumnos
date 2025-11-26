@@ -1,0 +1,93 @@
+﻿<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span>Búsqueda de Alumnos</span>
+        <button type="button" class="btn-close btn-lose" data-form="busqueda_alumno" aria-label="Close"></button>
+    </div>
+    <div class="card-body">
+        <div class="input-group mb-3">
+            <span class="input-group-text">Filtrar:</span>
+            <input type="text" class="form-control" id="txtCriterio" placeholder="Escribe nombre o apellido..." onkeyup="filtrarTabla()">
+        </div>
+
+        <table class="table table-striped table-hover table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Dirección</th>
+                    <th>Teléfono</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tblBodyAlumnos">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    cargarAlumnos();
+
+    async function cargarAlumnos() {
+        const url = '/api/Alumnos';
+
+        try {
+            let response = await fetch(url);
+            if (response.ok) {
+                let alumnos = await response.json();
+                mostrarAlumnos(alumnos);
+            } else {
+                alert("Error al cargar datos");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+
+    function mostrarAlumnos(alumnos) {
+        let html = '';
+        alumnos.forEach(alumno => {
+            html += `
+                <tr>
+                    <td>${alumno.id}</td>
+                    <td>${alumno.nombre} ${alumno.apellido || ''}</td>
+                    <td>${alumno.direccion}</td>
+                    <td>${alumno.telefono}</td>
+                    <td class="text-center">
+                        <button class="btn btn-sm btn-danger" onclick="eliminarAlumno(${alumno.id})">Eliminar</button>
+                    </td>
+                </tr>
+            `;
+        });
+        document.getElementById('tblBodyAlumnos').innerHTML = html;
+
+        window.listaAlumnosGlobal = alumnos;
+    }
+
+    async function eliminarAlumno(id) {
+        if (!confirm("¿Estás seguro de eliminar al alumno con ID " + id + "?")) return;
+
+        const url = `/api/Alumnos/${id}`;
+
+        try {
+            let response = await fetch(url, { method: 'DELETE' });
+            if (response.ok) {
+                alert("Alumno eliminado");
+                cargarAlumnos();
+            } else {
+                alert("No se pudo eliminar");
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    function filtrarTabla() {
+        let criterio = document.getElementById('txtCriterio').value.toLowerCase();
+        let listaFiltrada = window.listaAlumnosGlobal.filter(alumno => {
+            let nombreCompleto = (alumno.nombre + " " + (alumno.apellido || "")).toLowerCase();
+            return nombreCompleto.includes(criterio);
+        });
+        mostrarAlumnos(listaFiltrada);
+    }
+</script>

@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <None Include="wwwroot\views\alumno.html" />
+    <None Include="wwwroot\views\index.html" />
   </ItemGroup>
 
 </Project>

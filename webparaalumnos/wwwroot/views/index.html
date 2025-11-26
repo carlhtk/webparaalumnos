@@ -1,10 +1,9 @@
 ﻿<!DOCTYPE html>
-
 <html data-bs-theme="dark">
 <head>
     <meta charset="utf-8" />
     <title>::.. SISTEMA ACADEMICO ..::</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap%205.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="https://cdn.jsdelivr.net/npm/bootstrap%205.3.8/dist/css/bootstrap.min.css" crossorigin="anonymous" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -33,32 +32,45 @@
         <div class="position-absolute" id="materia"></div>
         <div class="position-absolute" id="busqueda_materia"></div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvsQOEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.min.js" integrity="sha256-/9n+G+I/mF8sP8+eSdw6EK7x+zXbmzF+eZMXgl4QwPQ=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
         document.addEventListener("DOMContentLoaded", e => {
-            mnxAcademica.addEventListener("click", event => {
-                event.preventDefault();
-                abrirVentana(event.target.dataset.form);
+            const menu = document.getElementById('mnxAcademica');
+
+            menu.addEventListener("click", event => {
+                if (event.target.tagName === 'A' && event.target.dataset.form) {
+                    event.preventDefault();
+                    abrirVentana(event.target.dataset.form);
+                }
+            });
+
+            $(document).on('click', '.btn-lose', function (e) {
+                let formId = $(this).data('form');
+                $(`#${formId}`).hide();
             });
         });
+
         function abrirVentana(form) {
-            let $ventana = $(`#${form}`); //#alumno, #docente, #materia
+            let $ventana = $(`#${form}`);
+
             if ($ventana.find(`form`).length > 0) {
                 $ventana.show();
             } else {
                 let url = `/views/${form}.html`;
-                fetch(url).then(resp => resp.text()).then(vista => {
-                    $(`#${form}`).html(vista).draggable();
-                    cerrarVentana();
-                })
+                fetch(url)
+                    .then(resp => {
+                        if (resp.ok) return resp.text();
+                        else throw new Error("Error al cargar vista");
+                    })
+                    .then(vista => {
+                        $ventana.html(vista).draggable();
+                    })
+                    .catch(err => console.error(err));
             }
-        }
-        function cerrarVentana() {
-            $('.btn-lose').click(e => {
-                $(`#${e.target.dataset.form}`).hide();
-            });
         }
     </script>
 </body>

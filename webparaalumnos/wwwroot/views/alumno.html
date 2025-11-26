@@ -3,7 +3,7 @@
     <div class="row p-1">
         <div class="col-3 col-md-2">CÓDIGO</div>
         <div class="col-9 col-md-4">
-            <input required type="text" class="form-control" id="txtCodigoAlumno" name="txtCodigoAlumno" />
+            <input required type="number" class="form-control" id="txtCodigoAlumno" name="txtCodigoAlumno" placeholder="Escribe el ID" />
         </div>
     </div>
 
@@ -15,61 +15,77 @@
     </div>
 
     <div class="row p-1">
-        <div class="col-3 col-md-2">DIRECCIÓN</div>
+        <div class="col-3 col-md-2">APELLIDO</div>
         <div class="col-9 col-md-10">
-            <input required type="text" class="form-control" id="txtDireccionAlumno" name="txtDireccionAlumno" />
+            <input required type="text" class="form-control" id="txtApellidoAlumno" name="txtApellidoAlumno" />
         </div>
     </div>
 
     <div class="row p-1">
-        <div class="col-3 col-md-2">TELÉFONO</div>
+        <div class="col-3 col-md-2">EDAD</div>
         <div class="col-9 col-md-4">
-            <input type="text" class="form-control" id="txtTelefonoAlumno" name="txtTelefonoAlumno" />
+            <input required type="number" class="form-control" id="txtEdadAlumno" name="txtEdadAlumno" min="1" max="120" />
         </div>
     </div>
 
-    <div class="row p-1">
+    <div class="row p-1 mt-3">
         <div class="col-12 text-center">
             <input type="submit" class="btn btn-outline-primary" value="Guardar" />
             <input type="reset" class="btn btn-outline-warning" value="Nuevo" />
-            <input type="button" class="btn btn-outline-success" value="Buscar" onclick="abrirVentana('busqueda_alumnos')" />
+            <input type="button" class="btn btn-outline-success" value="Buscar" onclick="abrirVentana('busqueda_alumno')" />
+            <button type="button" class="btn btn-secondary btn-lose" data-form="alumno">Cerrar</button>
         </div>
     </div>
 
 </form>
 
 <script>
-frmAlumno.addEventListener('submit', e => {
-    e.preventDefault();
-    guardarAlumno();
-});
+    var formulario = document.getElementById("frmAlumno");
 
-async function guardarAlumno() {
-    let datos = {
-        codigo: txtCodigoAlumno.value,
-        nombre: txtNombreAlumno.value,
-        direccion: txtDireccionAlumno.value,
-        telefono: txtTelefonoAlumno.value
-    };
+    if (formulario) {
+        formulario.addEventListener('submit', function (e) {
+            e.preventDefault();
+            guardarAlumno();
+        });
+    }
 
-    const url = 'https://localhost:7039/api/Alumnos';
+    async function guardarAlumno() {
+        // Recopilar datos convirtiendo los números correctamente
+        let datos = {
+            id: parseInt(document.getElementById("txtCodigoAlumno").value),
+            nombre: document.getElementById("txtNombreAlumno").value,
+            apellido: document.getElementById("txtApellidoAlumno").value,
+            edad: parseInt(document.getElementById("txtEdadAlumno").value)
+        };
 
-    const respuesta = await fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(datos)
-    });
-    alumno = await respuesta.json();
-    if ((alumno?.idAlumno || 0) > 0) {
-        limpiarDatosAlumno();
+        const url = '/api/Alumnos';
+
+        try {
+            const respuesta = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(datos)
+            });
+
+            if (respuesta.ok) {
+                alert("¡Alumno guardado con éxito!");
+                limpiarDatosAlumno();
+            } else {
+                let errorTexto = await respuesta.text();
+                alert("Error al guardar: " + errorTexto);
+            }
+        } catch (error) {
+            console.error(error);
+            alert("Error de conexión: " + error.message);
+        }
     }
 
     function limpiarDatosAlumno() {
-        txtCodigoAlumno.value = "";
-        txtNombreAlumno.value = "";
-        txtDireccionAlumno.value = "";
-        txtTelefonoAlumno.value = "";
-        }
-    </script>
+        document.getElementById("txtCodigoAlumno").value = "";
+        document.getElementById("txtNombreAlumno").value = "";
+        document.getElementById("txtApellidoAlumno").value = "";
+        document.getElementById("txtEdadAlumno").value = "";
+    }
+</script>
